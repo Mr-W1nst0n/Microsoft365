@@ -10,6 +10,6 @@ Execute the cmd as Administrator
 'GetAutoPilot.cmd'
 ```
 ## License
-Not my personal work. Repo created as Storage only
+Not my personal work. Repo created as storage only
 All credits goes to [Brad Wyatt](https://github.com/bwya77/)
 Further details on Lazy Administrator blog *(<a href="https://www.thelazyadministrator.com/2020/01/27/get-a-new-computers-auto-pilot-hash-without-going-through-the-out-of-box-experience-oobe/" target="_blank">Here</a>)*
