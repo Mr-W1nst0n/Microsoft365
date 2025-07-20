@@ -1,3 +1,8 @@
+param (
+    [System.String]
+    $TenantPrefix = "PUTYOURDATAHERE"
+)
+
 #Requires -Version 7.0
 #Requires -Modules Microsoft.Graph.Identity.SignIns
 
@@ -6,11 +11,11 @@ Clear-Host
 
 Try
 {
-    #Parameters
-    $TenantPrefix = 'PUTYOURDATAHERE' #show2me
-
     #Load Environment Variables
     $hostname = $env:computername
+    $TenantId = (Get-Item -Path Env:\$($TenantPrefix):TenantId).Value
+    $ClientId = (Get-Item -Path Env:\$($TenantPrefix):IntuneAutomationClientId).Value
+    $SecretId = (Get-Item -Path Env:\$($TenantPrefix):IntuneAutomationClientSecretValue).Value
 
     #Logs
     $dateTime = (Get-Date).ToString('dd-MM-yyyy_hh-mm-ss')
@@ -31,11 +36,17 @@ Try
     #Start Transctipt
     Start-Transcript -Path $TranscriptOutput -NoClobber -UseMinimalHeader -IncludeInvocationHeader
 
+    #Convert the Client Secret to a Secure String
+    $SecureClientSecret = ConvertTo-SecureString -String $SecretId -AsPlainText -Force
+
+    #Create a PSCredential Object Using the Client ID and Secure Client Secret
+    $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ClientId, $SecureClientSecret
+
     #Performance Counter
     $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
     #Connect to Microsoft Graph API
-    Connect-MgGraph -Scopes 'Policy.Read.All' -NoWelcome
+    Connect-MgGraph -NoWelcome -TenantId $TenantId -ClientSecretCredential $ClientSecretCredential
 
     #Retrieve all conditional access policies from Microsoft Graph API
     $AllPolicies = Get-MgIdentityConditionalAccessPolicy -All
