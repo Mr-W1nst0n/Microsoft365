@@ -87,7 +87,7 @@ Try
                 #Print an error message for the policy backup
                 Write-Host "Error occurred while backing up CA policy: $($Policy.DisplayName). $($_.Exception.Message)" -ForegroundColor 'Red'
                 $PolicyJSON | Out-File -FilePath "$folderPath\$($Policy.Id).json" -Force
-                Write-Host "[LOG] $($Policy.Id) used instead"  -Foregroundcolor 'Red'
+                Write-Host "[LOG] $($Policy.Id) used instead of $($Policy.DisplayName)"  -Foregroundcolor 'DarkGray'
             }
         }
     }
